@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
-/**
- * Created by elias on 12/01/15.
- */
 public class DetailActivity extends Activity {
 
 

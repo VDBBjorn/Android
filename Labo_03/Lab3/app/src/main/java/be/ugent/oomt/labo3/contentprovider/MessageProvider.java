@@ -15,10 +15,6 @@ import android.text.TextUtils;
 import be.ugent.oomt.labo3.contentprovider.database.DatabaseContract;
 import be.ugent.oomt.labo3.contentprovider.database.DbHelper;
 
-
-/**
- * Created by elias on 04/11/13.
- */
 public class MessageProvider extends ContentProvider {
 
 	// database

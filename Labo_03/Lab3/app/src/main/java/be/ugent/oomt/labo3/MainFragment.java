@@ -9,9 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-/**
- * Created by elias on 12/01/15.
- */
 public class MainFragment extends ListFragment {
 
     boolean mDuelPane;

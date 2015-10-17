@@ -7,9 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-/**
- * Created by elias on 12/01/15.
- */
 public class DetailFragment extends Fragment {
 
     public int getShownIndex() {
