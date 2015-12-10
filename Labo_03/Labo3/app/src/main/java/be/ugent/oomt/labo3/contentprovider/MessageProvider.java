@@ -11,6 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 
 import be.ugent.oomt.labo3.contentprovider.database.DatabaseContract;
 import be.ugent.oomt.labo3.contentprovider.database.DbHelper;
@@ -21,9 +22,10 @@ import be.ugent.oomt.labo3.contentprovider.database.DbHelper;
  */
 public class MessageProvider extends ContentProvider {
 
-	// database
-    private SQLiteDatabase sqlDB;
-
+    public static final String CONTENT_MESSAGES_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/messages";
+    public static final String CONTENT_MESSAGES_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/message";
+    public static final String CONTENT_CONTACTS_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/contacts";
+    public static final String CONTENT_CONTACTS_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/contact";
     // used for the UriMatcher
     private static final int MESSAGES = 10;
     private static final int MESSAGE_ID = 20;
@@ -31,18 +33,12 @@ public class MessageProvider extends ContentProvider {
     private static final int CONTACTS = 30;
     private static final int CONTACT_ID = 40;
     private static final String CONTACTS_PATH = "contacts";
-
     // unique namespace for contentprovider (provider name)
     private static final String AUTHORITY = "be.ugent.oomt.labo3.contentprovider.MessageProvider";
     public static final Uri MESSAGES_CONTENT_URL = Uri.parse("content://" + AUTHORITY + "/" + MESSAGES_PATH);
     public static final Uri CONTACTS_CONTENT_URL = Uri.parse("content://" + AUTHORITY + "/" + CONTACTS_PATH);
-
-    public static final String CONTENT_MESSAGES_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/messages";
-    public static final String CONTENT_MESSAGES_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/message";
-    public static final String CONTENT_CONTACTS_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/contacts";
-    public static final String CONTENT_CONTACTS_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/contact";
-
     private static final UriMatcher sURIMatcher;
+
     static {
         sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         sURIMatcher.addURI(AUTHORITY, MESSAGES_PATH, MESSAGES);
@@ -51,14 +47,11 @@ public class MessageProvider extends ContentProvider {
         sURIMatcher.addURI(AUTHORITY, CONTACTS_PATH + "/#", CONTACT_ID);
     }
 
-    @Override
-    public boolean onCreate() {
-        DbHelper dbHelper = new DbHelper(getContext());
-        sqlDB = dbHelper.getWritableDatabase();
-        return sqlDB != null;
-    }
+    // database
+    private SQLiteDatabase sqlDB;
 
     public static void addTestData(Context context) {
+        Log.d("MESSAGEPROVIDER", "Adding test data");
         ContentValues values = new ContentValues();
         String contact = "test@ugent.be";
 
@@ -76,6 +69,13 @@ public class MessageProvider extends ContentProvider {
         values.put(DatabaseContract.Message.COLUMN_NAME_CONTACT, contact);
         values.put(DatabaseContract.Message.COLUMN_NAME_MESSAGE, "This is a second test message.");
         context.getContentResolver().insert(MessageProvider.MESSAGES_CONTENT_URL, values);
+    }
+
+    @Override
+    public boolean onCreate() {
+        DbHelper dbHelper = new DbHelper(getContext());
+        sqlDB = dbHelper.getWritableDatabase();
+        return sqlDB != null;
     }
 
     @Override

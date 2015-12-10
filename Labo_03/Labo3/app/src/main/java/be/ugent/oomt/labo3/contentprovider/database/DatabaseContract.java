@@ -14,6 +14,7 @@ public abstract class DatabaseContract {
     public static final String DATABASE_NAME = "labo3.db";
 
     public static void onCreate(SQLiteDatabase db) {
+        Log.w(Message.class.getName(), "create db");
         Contact.onCreate(db);
         Message.onCreate(db);
     }
