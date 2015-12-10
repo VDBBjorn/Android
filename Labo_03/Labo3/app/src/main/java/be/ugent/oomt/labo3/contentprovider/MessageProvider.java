@@ -52,23 +52,25 @@ public class MessageProvider extends ContentProvider {
 
     public static void addTestData(Context context) {
         Log.d("MESSAGEPROVIDER", "Adding test data");
-        ContentValues values = new ContentValues();
-        String contact = "test@ugent.be";
+        for (int i = 1; i <= 5; i++) {
+            ContentValues values = new ContentValues();
+            String contact = "test" + i + "@ugent.be";
 
-        // status update
-        values.put(DatabaseContract.Contact.COLUMN_NAME_CONTACT, contact);
-        values.put(DatabaseContract.Contact.COLUMN_NAME_STATE, "test state");
-        context.getContentResolver().insert(MessageProvider.CONTACTS_CONTENT_URL, values);
-        // message
-        values = new ContentValues();
-        values.put(DatabaseContract.Message.COLUMN_NAME_CONTACT, contact);
-        values.put(DatabaseContract.Message.COLUMN_NAME_MESSAGE, "This is a test message.");
-        context.getContentResolver().insert(MessageProvider.MESSAGES_CONTENT_URL, values);
-        // 2nd message
-        values = new ContentValues();
-        values.put(DatabaseContract.Message.COLUMN_NAME_CONTACT, contact);
-        values.put(DatabaseContract.Message.COLUMN_NAME_MESSAGE, "This is a second test message.");
-        context.getContentResolver().insert(MessageProvider.MESSAGES_CONTENT_URL, values);
+            // status update
+            values.put(DatabaseContract.Contact.COLUMN_NAME_CONTACT, contact);
+            values.put(DatabaseContract.Contact.COLUMN_NAME_STATE, "test state" + i);
+            context.getContentResolver().insert(MessageProvider.CONTACTS_CONTENT_URL, values);
+            // message
+            values = new ContentValues();
+            values.put(DatabaseContract.Message.COLUMN_NAME_CONTACT, contact);
+            values.put(DatabaseContract.Message.COLUMN_NAME_MESSAGE, "This is a test message." + i);
+            context.getContentResolver().insert(MessageProvider.MESSAGES_CONTENT_URL, values);
+            // 2nd message
+            values = new ContentValues();
+            values.put(DatabaseContract.Message.COLUMN_NAME_CONTACT, contact);
+            values.put(DatabaseContract.Message.COLUMN_NAME_MESSAGE, "This is a second test message." + i);
+            context.getContentResolver().insert(MessageProvider.MESSAGES_CONTENT_URL, values);
+        }
     }
 
     @Override
