@@ -60,6 +60,8 @@ public class Beacon {
     }
 
     public double getEstimatedDistance(){
-        return 0;
+        double A = -45.0;
+        double n = 2.2;
+        return Math.pow(10.0,((A + rssi)/(10.0*n)));
     }
 }

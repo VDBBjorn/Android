@@ -4,5 +4,7 @@
     <string name="app_name">BeaconHunt</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="start">Start scanning!</string>
 
+    <string name="stop">Stop scanning!</string>
 </resources>
