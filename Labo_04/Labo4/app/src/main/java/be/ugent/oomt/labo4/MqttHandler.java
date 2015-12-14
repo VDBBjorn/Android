@@ -19,12 +19,12 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 public class MqttHandler implements MqttCallback, IMqttActionListener, MqttTraceHandler {
 
     // Mqtt server address
-    public static final String serverURI = "tcp://localhost:1883";
+    public static final String serverURI = "tcp://iot.eclipse.org:1883";
     // unique client id for identifying to Mqtt server
     public static final String clientId = "bjorn.vandenbussche@ugent.be";
     // TODO: fill in start topics
     // topics to subscribe to on application start
-    public static final String[] start_topics = new String[]{"bjornstopic", "othertopic"};
+    public static final String[] start_topics = new String[]{"/topic/state"};
     // Quality Of Service levels
     // 0: msg are only delivered when online, 1: msg are send once, 2: msg are send and checked
     public static final int qos = 2;
@@ -37,6 +37,7 @@ public class MqttHandler implements MqttCallback, IMqttActionListener, MqttTrace
     private MqttAndroidClient client;
 
     private MqttHandler(Context context) {
+        Log.d(TAG, "Constructor");
         this.context = context;
         createClient();
     }
@@ -49,6 +50,7 @@ public class MqttHandler implements MqttCallback, IMqttActionListener, MqttTrace
     }
 
     private void createClient() {
+        Log.d(TAG, "Creating client");
         client = new MqttAndroidClient(context, serverURI, clientId);
         client.setCallback(this);
         client.setTraceCallback(this);
@@ -56,7 +58,6 @@ public class MqttHandler implements MqttCallback, IMqttActionListener, MqttTrace
         options.setCleanSession(false);
         try {
             client.connect(options);
-            client.subscribe(start_topics, new int[]{qos, qos});
         } catch (MqttException e) {
             e.printStackTrace();
         }
@@ -93,6 +94,15 @@ public class MqttHandler implements MqttCallback, IMqttActionListener, MqttTrace
     @Override
     public void onSuccess(IMqttToken asyncActionToken) {
         Log.d(TAG, "onSuccess");
+        try {
+            MqttMessage message = new MqttMessage(new String(client.getClientId()).getBytes());
+            message.setQos(qos);
+            message.setRetained(true);
+            client.publish("/users", message);
+            client.subscribe("/users",qos);
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

@@ -3,6 +3,8 @@ package be.ugent.oomt.labo4;
 import android.app.Application;
 import android.content.Context;
 
+import org.eclipse.paho.android.service.MqttAndroidClient;
+
 import be.ugent.oomt.labo4.contentprovider.MessageProvider;
 
 /**
@@ -16,12 +18,12 @@ public class MyApplication extends Application {
         return context;
     }
 
-    // TODO: add static getter method for context;
-
     @Override
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
-        MessageProvider.addTestData(context);
+        //MessageProvider.addTestData(context);
+        MqttHandler handler = MqttHandler.getInstance();
+        MqttAndroidClient client = handler.getClient();
     }
 }

@@ -10,7 +10,7 @@ import android.util.Log;
 public abstract class DatabaseContract {
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "labo4.db";
 
     public static void onCreate(SQLiteDatabase db) {
