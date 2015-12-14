@@ -29,9 +29,6 @@ public class DetailFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        // TODO: change DetailFragment to show selected user feed and initialize loader
-
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
         TextView title = (TextView) view.findViewById(R.id.superhero_name);
         TextView summary = (TextView) view.findViewById(R.id.superhero_history);
@@ -39,8 +36,4 @@ public class DetailFragment extends Fragment {
         summary.setText(getResources().getStringArray(R.array.superheroes_history)[getShownIndex()]);
         return view;
     }
-
-    // TODO: implement LoaderManager.LoaderCallbacks<Cursor> interface
-
-    // TODO: on cursor load finish append all messages to text view
 }
