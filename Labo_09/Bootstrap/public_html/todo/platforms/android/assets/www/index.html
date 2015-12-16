@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html manifest="todo.appcache">
+<head>
+    <title>TODO supply a title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css"/>
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div  class="input-group">
+                    <span class="input-group-addon">Do</span>
+                    <input id="txtItem" type="text" class="form-control" placeholder="something" /> 
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="input-group">
+                    <span class="input-group-addon">before</span>
+                    <input id="dtItem" type="datetime-local" class="form-control" />
+                    <span class="input-group-btn">
+                        <button id="btnAdd" class="btn btn-primary" type="button">Add</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <hr/>
+
+        <div class="row" id="items">
+        </div>
+    </div>
+    <div class="container">
+        <div onclick="schedule()">Single<br /><span>schedule(1)</span></div>
+        <div onclick="scheduleMultiple()">Multiple<br /><span>schedule(1, 2, 3)</span></div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> 
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="js/script.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script>
+        schedule = function () {
+            cordova.plugins.notification.local.schedule({
+                id: 1,
+                text: 'Test Message 1',
+                icon: 'http://3.bp.blogspot.com/-Qdsy-GpempY/UU_BN9LTqSI/AAAAAAAAAMA/LkwLW2yNBJ4/s1600/supersu.png',
+                smallIcon: 'res://cordova',
+                sound: null,
+                data: { test: id }
+            });
+        };
+        scheduleMultiple = function () {
+            cordova.plugins.notification.local.schedule([{
+                id: 1,
+                text: 'Multi Message 1',
+                icon: 'res://cordova'
+            }, {
+                id: 2,
+                text: 'Multi Message 2',
+                icon: 'res://icon',
+                smallIcon: 'ic_media_play'
+            }, {
+                id: 3,
+                text: 'Multi Message 3',
+                icon: 'res://icon',
+                smallIcon: 'ic_media_pause'
+            }]);
+        };
+    </script>
+</body>
+</html>
