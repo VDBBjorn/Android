@@ -1,6 +1,10 @@
 package be.ugent.oomt.labo4;
 
+import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Binder;
+import android.os.IBinder;
 import android.util.Log;
 
 import org.eclipse.paho.android.service.MqttAndroidClient;
@@ -16,7 +20,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 /**
  * Created by elias on 19/01/15.
  */
-public class MqttHandler implements MqttCallback, IMqttActionListener, MqttTraceHandler {
+public class MqttHandler extends Service implements MqttCallback, IMqttActionListener, MqttTraceHandler {
 
     // Mqtt server address
     public static final String serverURI = "tcp://iot.eclipse.org:1883";
@@ -24,7 +28,7 @@ public class MqttHandler implements MqttCallback, IMqttActionListener, MqttTrace
     public static final String clientId = "bjorn.vandenbussche@ugent.be";
     // TODO: fill in start topics
     // topics to subscribe to on application start
-    public static final String[] start_topics = new String[]{"/topic/state"};
+    public static final String[] start_topics = new String[]{"/state"};
     // Quality Of Service levels
     // 0: msg are only delivered when online, 1: msg are send once, 2: msg are send and checked
     public static final int qos = 2;
@@ -35,6 +39,9 @@ public class MqttHandler implements MqttCallback, IMqttActionListener, MqttTrace
     private final boolean cleanSession = false;
     private final Context context;
     private MqttAndroidClient client;
+
+    // Binder given to clients
+    private final IBinder mBinder = new LocalBinder();
 
     private MqttHandler(Context context) {
         Log.d(TAG, "Constructor");
@@ -123,5 +130,21 @@ public class MqttHandler implements MqttCallback, IMqttActionListener, MqttTrace
     @Override
     public void traceException(String source, String message, Exception e) {
         Log.d(TAG, "traceException");
+    }
+
+    /**
+     * Class used for the client Binder.  Because we know this service always
+     * runs in the same process as its clients, we don't need to deal with IPC.
+     */
+    public class LocalBinder extends Binder {
+        MqttHandler getService() {
+            // Return this instance of LocalService so clients can call public methods
+            return MqttHandler.getInstance();
+        }
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return mBinder;
     }
 }
