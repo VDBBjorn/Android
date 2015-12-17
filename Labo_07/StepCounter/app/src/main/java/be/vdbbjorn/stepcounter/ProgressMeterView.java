@@ -1,21 +1,19 @@
 package be.vdbbjorn.stepcounter;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
 /**
- * Created by bjorn on 14/12/15.
+ * Created by sam on 15/10/15.
  */
 public class ProgressMeterView extends View {
     private float progress = 0.5f;
-    private static final int circle_width = 20;
+    private static final int circle_width = 30;
 
     public ProgressMeterView(Context context) {
         super(context);
@@ -29,8 +27,6 @@ public class ProgressMeterView extends View {
         this.progress = progress;
         invalidate();
     }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);

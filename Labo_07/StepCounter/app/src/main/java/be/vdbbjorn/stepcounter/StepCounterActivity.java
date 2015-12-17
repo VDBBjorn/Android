@@ -1,53 +1,78 @@
 package be.vdbbjorn.stepcounter;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
-import android.os.IBinder;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.NotificationCompat;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.logging.Filter;
 
 public class StepCounterActivity extends Activity {
 
-    private BroadcastReceiver receiver;
-    private ProgressMeterView progressMeterView;
-    private int steps = 0;
+    private BroadcastReceiver broadcastReceiver;
+    Intent serviceIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        progressMeterView = new ProgressMeterView(getApplicationContext());
-        progressMeterView.setProgress(0);
-        setContentView(progressMeterView);
-        Intent intent = new Intent(getBaseContext(), StepCounterService.class);
-        startService(intent);
-        registerBroadcastReceiver();
-    }
+        setContentView(R.layout.activity_step_counter);
 
-    private void registerBroadcastReceiver() {
-        IntentFilter filter = new IntentFilter();
-        filter.addAction("STEPS_SERVICE");
-        receiver = new BroadcastReceiver() {
+        TextView textViewSteps = (TextView) findViewById(R.id.stepView);
+        textViewSteps.setText("0");
+
+        serviceIntent = new Intent(this, StepCounterService.class);
+        startService(serviceIntent);
+
+        broadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                steps = intent.getIntExtra("steps",steps);
-                progressMeterView.setProgress(steps/10000);
+                if(intent.hasExtra("steps")){
+                    int steps = intent.getExtras().getInt("steps");
+
+                    TextView textViewSteps = (TextView) findViewById(R.id.stepView);
+                    textViewSteps.setText("" + steps);
+                }
+
             }
         };
-        registerReceiver(receiver, filter);
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(StepCounterService.ACTION_STEPCOUNT);
+        registerReceiver(broadcastReceiver, intentFilter);
     }
 
     @Override
     protected void onDestroy() {
+        //stopService(serviceIntent);
+        unregisterReceiver(broadcastReceiver);
         super.onDestroy();
-        unregisterReceiver(receiver);
     }
+
+//
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.menu_step_counter, menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
+//        int id = item.getItemId();
+//
+//        //noinspection SimplifiableIfStatement
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
+//
+//        return super.onOptionsItemSelected(item);
+//    }
 }

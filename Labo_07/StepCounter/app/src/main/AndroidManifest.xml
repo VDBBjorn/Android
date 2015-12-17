@@ -15,8 +15,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name=".StepCounterService" android:process=":stepcounter_service" android:label="StepCounterService" android:icon="@mipmap/ic_launcher"/>
-        <receiver android:name=".StepCounterActivity" />
+        <service
+            android:name=".StepCounterService"
+            android:process=":stepcounter_service"
+            android:label="StepCounterService"
+            android:icon="@mipmap/ic_launcher"/>
+
     </application>
 
 </manifest>
